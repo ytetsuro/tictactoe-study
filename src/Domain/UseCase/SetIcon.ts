@@ -1,13 +1,13 @@
 import PanelCollection from '../Entity/PanelCollection';
-import Icon from '../Enums/Icon';
+import Turn from '../Entity/Turn';
 
 export default class SetIcon {
     private panelCollection: PanelCollection;
-    private icon: Icon;
+    private turn: Turn;
 
-    public constructor(panelCollection: PanelCollection, icon: Icon) {
+    public constructor(panelCollection: PanelCollection, turn: Turn) {
         this.panelCollection = panelCollection;
-        this.icon = icon;
+        this.turn = turn;
     }
 
     /**
@@ -19,7 +19,8 @@ export default class SetIcon {
     public run(x: number, y: number) {
         try {
             const panel = this.panelCollection.findByPosition(x, y);
-            panel.setIcon(this.icon);
+            panel.setIcon(this.turn.getIcon());
+            this.turn.switchIcon();
         } catch (e) {
             console.log(e.message);
         }

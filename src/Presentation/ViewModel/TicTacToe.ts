@@ -2,20 +2,27 @@ import PanelCollection from '../../Domain/Entity/PanelCollection';
 import SetIcon from '../../Domain/UseCase/SetIcon';
 import GetPanelCollection from '../../Domain/UseCase/GetPanelCollection';
 import Panel from '../../Domain/Entity/Panel';
-import Icon from '../../Domain/Enums/Icon';
+import Turn from '../../Domain/Entity/Turn';
 
 export default class TicTacToe {
     private panelCollection: PanelCollection;
 
     private getPanelCollectionUseCase: GetPanelCollection;
 
+    private setIcon: SetIcon;
+
+    private turn: Turn;
+
     public constructor(getPanelCollectionUseCase: GetPanelCollection) {
         this.getPanelCollectionUseCase = getPanelCollectionUseCase;
         this.panelCollection = new PanelCollection([]);
+        this.turn = new Turn();
+        this.setIcon = new SetIcon(this.panelCollection, this.turn);
     }
 
     public async setPanelList() {
         this.panelCollection = await this.getPanelCollectionUseCase.run();
+        this.setIcon = new SetIcon(this.panelCollection, this.turn);
     }
 
     public getPanelList() {
@@ -23,10 +30,8 @@ export default class TicTacToe {
     }
 
     public getSetIconEvent(panel: Panel) {
-        const setIconUseCase = new SetIcon(this.panelCollection, Icon.MARU);
-
         return () => {
-            setIconUseCase.run(panel.x, panel.y);
+            this.setIcon.run(panel.x, panel.y);
         };
     }
 }
