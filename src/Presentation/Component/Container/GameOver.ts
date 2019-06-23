@@ -1,26 +1,14 @@
 import { default as m } from 'mithril';
-import Panel from '../Presentational/Panel';
-import { default as ViewModel } from '../../ViewModel/TicTacToe';
+import GameStatusRepository from '../../../Domain/Repository/GameStatusRepository';
 
 export default class GameOver implements m.ClassComponent {
-    // private viewModel: ViewModel;
+    private gameStatusRepository: GameStatusRepository;
 
-    // constructor(viewModel: ViewModel) {
-    //     this.viewModel = viewModel;
-    // }
-
-    oninit() {
-        this.viewModel.setPanelList().then(() => {
-            m.redraw();
-        });
+    constructor(gameStatusRepository: GameStatusRepository) {
+        this.gameStatusRepository = gameStatusRepository;
     }
 
     view() {
-        return m(
-            'div',
-            this.viewModel.getPanelList().map(row => {
-                return m(Panel, { entity: row, eventCreater: this.viewModel });
-            }),
-        );
+        return m('div', this.gameStatusRepository.get().getWinnerIcon());
     }
 }

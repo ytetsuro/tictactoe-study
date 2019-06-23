@@ -1,37 +1,37 @@
+import { default as m } from 'mithril';
 import PanelCollection from '../../Domain/Entity/PanelCollection';
 import SetIcon from '../../Domain/UseCase/SetIcon';
-import GetPanelCollection from '../../Domain/UseCase/GetPanelCollection';
+import StartGame from '../../Domain/UseCase/StartGame';
 import Panel from '../../Domain/Entity/Panel';
-import Turn from '../../Domain/Entity/Turn';
+import GameStatus from '../../Domain/Entity/GameStatus';
 
 export default class TicTacToe {
-    private panelCollection: PanelCollection;
+    private gameStatus: GameStatus;
 
-    private getPanelCollectionUseCase: GetPanelCollection;
+    private startGame: StartGame;
 
     private setIcon: SetIcon;
 
-    private turn: Turn;
-
-    public constructor(getPanelCollectionUseCase: GetPanelCollection) {
-        this.getPanelCollectionUseCase = getPanelCollectionUseCase;
-        this.panelCollection = new PanelCollection([]);
-        this.turn = new Turn();
-        this.setIcon = new SetIcon(this.panelCollection, this.turn);
+    public constructor(startGame: StartGame, setIcon: SetIcon) {
+        this.startGame = startGame;
+        this.gameStatus = new GameStatus(new PanelCollection([]));
+        this.setIcon = setIcon;
     }
 
-    public async setPanelList() {
-        this.panelCollection = await this.getPanelCollectionUseCase.run();
-        this.setIcon = new SetIcon(this.panelCollection, this.turn);
+    public async gameStart() {
+        this.gameStatus = await this.startGame.run();
     }
 
     public getPanelList() {
-        return this.panelCollection.getSortedList();
+        return this.gameStatus.getPanelList();
     }
 
     public getSetIconEvent(panel: Panel) {
         return () => {
             this.setIcon.run(panel.x, panel.y);
+            if (!this.gameStatus.isPlayable()) {
+                m.route.set('/show_winning');
+            }
         };
     }
 }

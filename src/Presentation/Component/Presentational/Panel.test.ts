@@ -3,25 +3,30 @@
     require('mithril/test-utils/pushStateMock')(),
 );
 import TicTacToe from '../../ViewModel/TicTacToe';
-import GetPanelCollection from '../../../Domain/UseCase/GetPanelCollection';
+import StartGame from '../../../Domain/UseCase/StartGame';
 import Panel from './Panel';
 import Icon from '../../../Domain/Enums/Icon';
+import GameStatusRepository from '../../../Data/Repository/GameStatusRepository';
+import SetIcon from '../../../Domain/UseCase/SetIcon';
 
 /// <amd-dependency path="mitril-query" />
 declare var require: (moduleId: string) => any;
 const mq = require('mithril-query');
 
 it('Iconがセットされていないパネルには、何も表示されないべき', async () => {
+    const gameStatusRepository = new GameStatusRepository();
     const ticTacToe = new TicTacToe(
-        new GetPanelCollection(
+        new StartGame(
             new class {
                 fetch() {
                     return Promise.resolve([{ x: 1, y: 1 }]);
                 }
             }(),
+            gameStatusRepository,
         ),
+        new SetIcon(gameStatusRepository),
     );
-    await ticTacToe.setPanelList();
+    await ticTacToe.gameStart();
 
     const panel = ticTacToe.getPanelList()[0];
 
@@ -30,16 +35,19 @@ it('Iconがセットされていないパネルには、何も表示されない
 });
 
 it('Iconがセットされているパネルには、アイコンが表示されるべき', async () => {
+    const gameStatusRepository = new GameStatusRepository();
     const ticTacToe = new TicTacToe(
-        new GetPanelCollection(
+        new StartGame(
             new class {
                 fetch() {
                     return Promise.resolve([{ x: 1, y: 1 }]);
                 }
             }(),
+            gameStatusRepository,
         ),
+        new SetIcon(gameStatusRepository),
     );
-    await ticTacToe.setPanelList();
+    await ticTacToe.gameStart();
 
     const panel = ticTacToe.getPanelList()[0];
     panel.setIcon(Icon.MARU);
@@ -49,16 +57,19 @@ it('Iconがセットされているパネルには、アイコンが表示され
 });
 
 it('Iconがクリックされた時にIconがセットされるべき', async () => {
+    const gameStatusRepository = new GameStatusRepository();
     const ticTacToe = new TicTacToe(
-        new GetPanelCollection(
+        new StartGame(
             new class {
                 fetch() {
                     return Promise.resolve([{ x: 1, y: 1 }]);
                 }
             }(),
+            gameStatusRepository,
         ),
+        new SetIcon(gameStatusRepository),
     );
-    await ticTacToe.setPanelList();
+    await ticTacToe.gameStart();
 
     const panel = ticTacToe.getPanelList()[0];
 

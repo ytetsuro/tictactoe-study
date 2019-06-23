@@ -38,8 +38,12 @@ export default class GameStatus {
     public setIcon(x: number, y: number) {
         const panel = this.panelCollection.findByPosition(x, y);
         panel.setIcon(this.turn.getIcon());
-        this.turn.switchIcon();
         this.setGameOver();
+        this.turn.switchIcon();
+    }
+
+    public getPanelList() {
+        return this.panelCollection.getSortedList();
     }
 
     private setGameOver() {

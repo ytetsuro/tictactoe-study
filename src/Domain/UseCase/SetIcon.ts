@@ -1,10 +1,10 @@
-import GameStatus from '../Entity/GameStatus';
+import GameStatusRepository from '../Repository/GameStatusRepository';
 
 export default class SetIcon {
-    private gameStatus: GameStatus;
+    private gameStatusRepository: GameStatusRepository;
 
-    public constructor(gameStatus: GameStatus) {
-        this.gameStatus = gameStatus;
+    public constructor(gameStatusRepository: GameStatusRepository) {
+        this.gameStatusRepository = gameStatusRepository;
     }
 
     /**
@@ -15,7 +15,7 @@ export default class SetIcon {
      */
     public run(x: number, y: number) {
         try {
-            this.gameStatus.setIcon(x, y);
+            this.gameStatusRepository.get().setIcon(x, y);
         } catch (e) {
             console.log(e.message);
         }
