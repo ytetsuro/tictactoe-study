@@ -1,13 +1,10 @@
-import PanelCollection from '../Entity/PanelCollection';
-import Turn from '../Entity/Turn';
+import GameStatusRepository from '../Repository/GameStatusRepository';
 
 export default class SetIcon {
-    private panelCollection: PanelCollection;
-    private turn: Turn;
+    private gameStatusRepository: GameStatusRepository;
 
-    public constructor(panelCollection: PanelCollection, turn: Turn) {
-        this.panelCollection = panelCollection;
-        this.turn = turn;
+    public constructor(gameStatusRepository: GameStatusRepository) {
+        this.gameStatusRepository = gameStatusRepository;
     }
 
     /**
@@ -18,9 +15,7 @@ export default class SetIcon {
      */
     public run(x: number, y: number) {
         try {
-            const panel = this.panelCollection.findByPosition(x, y);
-            panel.setIcon(this.turn.getIcon());
-            this.turn.switchIcon();
+            this.gameStatusRepository.get().setIcon(x, y);
         } catch (e) {
             console.log(e.message);
         }

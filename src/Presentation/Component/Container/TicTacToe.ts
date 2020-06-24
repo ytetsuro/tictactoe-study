@@ -10,7 +10,7 @@ export default class TicTacToe implements m.ClassComponent {
     }
 
     oninit() {
-        this.viewModel.setPanelList().then(() => {
+        this.viewModel.gameStart().then(() => {
             m.redraw();
         });
     }
