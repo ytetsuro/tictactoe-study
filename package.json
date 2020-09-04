@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "chart.js": "^2.8.0",
-    "mithril": "^1.1.6",
+    "mithril": "^1.1.7",
     "moment": "^2.24.0",
     "tsc": "^1.20150623.0"
   }
